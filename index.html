@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mithas — True Milk, True Ice Cream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MITHAS — HONEY THEME
+   Palette: liquid amber, beeswax, dark comb, golden sunlight
+   Signature: animated SVG honeycomb hero backdrop + honey-drip
+   section dividers that literally pour between sections
+============================================================ */
+:root{
+  /* Honey palette */
+  --honey:        #E8920A;   /* pure amber honey */
+  --honey-light:  #F5B942;   /* sunlit honey */
+  --honey-dark:   #B86A00;   /* dark amber */
+  --honey-pale:   #FEF3D0;   /* diluted honey / beeswax */
+  --honey-glow:   #FDE68A;   /* luminous gold shimmer */
+  --comb:         #1A0C00;   /* darkest honeycomb brown */
+  --comb-mid:     #3D1F00;   /* rich comb brown */
+  --wax:          #F9E4AA;   /* pale beeswax */
+  --wax-warm:     #F3D47A;   /* warm wax */
+  --pollen:       #FFFBEF;   /* near-white with warmth */
+  --line-h:       rgba(184,106,0,0.18);
+  --shadow-h:     0 24px 56px -20px rgba(184,106,0,0.38);
+  --shadow-deep:  0 40px 80px -30px rgba(26,12,0,0.5);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--pollen);
+  color:var(--comb);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+}
+::selection{background:var(--honey-glow); color:var(--comb);}
+
+h1,h2,h3,h4{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  color:var(--comb);
+  letter-spacing:-0.015em;
+}
+
+.eyebrow{
+  font-family:'Cinzel',serif;
+  font-weight:400;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  font-size:0.65rem;
+  color:var(--honey-dark);
+}
+
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;}
+}
+
+/* ── HONEY DRIP CURSOR ── */
+#drip-canvas{position:fixed;inset:0;pointer-events:none;z-index:9999;}
+
+/* ── SCROLL PROGRESS (amber stripe) ── */
+.progress-wrap{position:fixed;top:0;left:0;width:100%;height:5px;z-index:1001;}
+.progress-bar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--honey-dark),var(--honey),var(--honey-light));
+  transition:width 0.04s linear;
+  box-shadow:0 0 12px var(--honey);
+}
+
+/* ── HEADER ── */
+header{
+  position:fixed;top:5px;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 5vw;
+  background:rgba(254,243,208,0.72);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid transparent;
+  transition:all .4s ease;
+}
+header.scrolled{
+  border-color:var(--line-h);
+  padding:10px 5vw;
+  background:rgba(254,243,208,0.97);
+  box-shadow:0 4px 24px rgba(184,106,0,0.1);
+}
+
+.logo{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:1.55rem;color:var(--comb);
+}
+.logo-hex{
+  width:42px;height:42px;position:relative;
+  display:grid;place-items:center;flex-shrink:0;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.logo-hex svg{position:absolute;inset:0;}
+.logo:hover .logo-hex{transform:rotate(30deg) scale(1.1);}
+.logo .tag{
+  display:block;font-family:'Cinzel',serif;font-weight:400;font-size:0.52rem;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--honey-dark);margin-top:2px;
+}
+
+nav ul{display:flex;gap:32px;list-style:none;align-items:center;}
+nav a{
+  font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.9rem;
+  position:relative;padding:4px 0;color:var(--comb-mid);transition:color .3s;
+}
+nav a::after{
+  content:"";position:absolute;left:50%;bottom:-3px;width:0%;height:2px;
+  background:linear-gradient(90deg,var(--honey),var(--honey-light));
+  border-radius:2px;transition:width .3s ease,left .3s ease;
+}
+nav a:hover{color:var(--honey-dark);}
+nav a:hover::after{width:100%;left:0;}
+
+.nav-cta{
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  color:var(--pollen)!important;
+  padding:10px 24px;border-radius:30px;font-size:0.83rem;font-weight:600;
+  box-shadow:0 6px 20px rgba(184,106,0,0.38);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.nav-cta::after{display:none!important;}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(184,106,0,0.55);}
+
+.menu-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1100;padding:4px;}
+.menu-toggle span{width:26px;height:2.5px;background:var(--comb);border-radius:2px;transition:.3s;display:block;}
+.menu-toggle.active span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+.menu-toggle.active span:nth-child(2){opacity:0;}
+.menu-toggle.active span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;
+  padding:140px 5vw 100px;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 70% at 80% 0%, rgba(232,146,10,0.22),transparent 60%),
+    radial-gradient(ellipse 50% 50% at 10% 100%, rgba(184,106,0,0.14),transparent 55%),
+    var(--pollen);
+}
+
+/* Honeycomb SVG background pattern */
+.hero-comb-bg{
+  position:absolute;inset:0;z-index:0;opacity:0.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32zm0 34L0 84V52l28 16 28-16v32z' stroke='%23B86A00' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-size:56px 100px;
+}
+/* Honey glow orbs */
+.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.hero-orb1{width:500px;height:500px;background:rgba(232,146,10,0.18);top:-100px;right:-80px;}
+.hero-orb2{width:380px;height:380px;background:rgba(245,185,66,0.14);bottom:-60px;left:-60px;}
+
+.hero-grid{
+  display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;
+  width:100%;max-width:1280px;margin:0 auto;position:relative;z-index:2;
+}
+
+.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.hero-eyebrow .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--honey),var(--honey-light));
+  box-shadow:0 0 0 3px rgba(232,146,10,0.2);
+  animation:pulse 2s infinite;flex-shrink:0;
+}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 3px rgba(232,146,10,0.2);}50%{transform:scale(1.3);box-shadow:0 0 0 6px rgba(232,146,10,0);}}
+
+.hero h1{
+  font-size:clamp(2.3rem,5.8vw,4.8rem);
+  line-height:1.03;margin-bottom:26px;
+}
+.hero h1 em{
+  font-style:italic;font-weight:400;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey),var(--honey-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;
+}
+.hero h1 em .ink-line{
+  position:absolute;left:0;right:0;bottom:3px;height:0.38em;z-index:-1;
+  background:linear-gradient(90deg,rgba(245,185,66,0.5),rgba(232,146,10,0.25));
+  border-radius:3px;
+  transform:scaleX(0);transform-origin:left;
+  animation:swipe 1s 0.8s cubic-bezier(.65,0,.35,1) forwards;
+}
+@keyframes swipe{to{transform:scaleX(1);}}
+
+.hero p.lede{
+  font-size:1.08rem;line-height:1.75;
+  color:var(--comb-mid);max-width:490px;margin-bottom:36px;
+  font-weight:300;
+}
+
+.hero-actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:50px;}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--honey-dark) 0%,var(--honey) 50%,var(--honey-light) 100%);
+  background-size:200% 100%;background-position:100%;
+  color:var(--pollen);
+  padding:16px 34px;border-radius:50px;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.92rem;
+  display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 14px 32px rgba(184,106,0,0.45),0 0 0 0 rgba(232,146,10,0);
+  transition:background-position .4s ease,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;
+}
+.btn-primary:hover{
+  background-position:0%;
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 20px 42px rgba(184,106,0,0.55),0 0 24px rgba(232,146,10,0.25);
+}
+.btn-primary svg{transition:transform .3s ease;}
+.btn-primary:hover svg{transform:translateX(5px);}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.92rem;
+  color:var(--comb);padding:16px 6px;
+}
+.play-ring{
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid var(--line-h);
+  background:rgba(232,146,10,0.06);
+  display:grid;place-items:center;
+  transition:all .3s ease;flex-shrink:0;
+}
+.btn-ghost:hover .play-ring{
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  border-color:var(--honey);
+  box-shadow:0 6px 20px rgba(184,106,0,0.35);
+}
+.btn-ghost:hover .play-ring svg path{fill:var(--pollen);}
+
+.hero-stats{display:flex;gap:44px;flex-wrap:wrap;}
+.hero-stats div{display:flex;flex-direction:column;position:relative;}
+.hero-stats div:not(:last-child)::after{
+  content:"";position:absolute;right:-22px;top:20%;height:60%;width:1px;
+  background:linear-gradient(var(--honey-light),var(--honey-dark));opacity:0.35;
+}
+.hero-stats .num{
+  font-family:'Playfair Display',serif;font-weight:700;font-size:2.2rem;
+  background:linear-gradient(135deg,var(--comb),var(--honey-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:flex;align-items:baseline;gap:2px;
+}
+.hero-stats .lbl{
+  font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:0.1em;
+  color:var(--honey-dark);margin-top:4px;text-transform:uppercase;
+}
+
+/* ── Hero visual ── */
+.hero-visual{position:relative;height:580px;display:flex;align-items:center;justify-content:center;}
+
+/* Rotating hex ring */
+.hex-ring{
+  position:absolute;width:460px;height:460px;
+  border-radius:50%;border:1px dashed rgba(184,106,0,0.3);
+  animation:spin-ring 40s linear infinite;
+}
+.hex-ring-inner{
+  position:absolute;width:360px;height:360px;
+  border-radius:50%;border:1px dashed rgba(232,146,10,0.2);
+  animation:spin-ring 25s linear infinite reverse;
+}
+@keyframes spin-ring{to{transform:rotate(360deg);}}
+
+/* Glow blob behind image */
+.hero-glow{
+  position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,185,66,0.45),rgba(232,146,10,0.2) 55%,transparent 75%);
+  filter:blur(30px);
+  animation:glow-pulse 4s ease-in-out infinite;
+}
+@keyframes glow-pulse{0%,100%{transform:scale(1);opacity:0.7;}50%{transform:scale(1.1);opacity:1;}}
+
+/* Honeycomb hex dots orbiting */
+.hex-dot{
+  position:absolute;width:14px;height:14px;
+  background:linear-gradient(135deg,var(--honey),var(--honey-light));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  animation:orbit 12s linear infinite;
+  transform-origin:0 0;
+}
+
+/* Hero image */
+.hero-img-frame{
+  position:relative;z-index:4;
+  width:260px;height:400px;
+  /* Honey jar shape */
+  border-radius:48% 48% 38% 38% / 40% 40% 60% 60%;
+  overflow:hidden;
+  box-shadow:0 0 0 6px rgba(232,146,10,0.2),0 0 0 12px rgba(232,146,10,0.08),var(--shadow-deep);
+  animation:float-hero 5s ease-in-out infinite;
+}
+.hero-img-frame img{width:100%;height:100%;object-fit:cover;}
+@keyframes float-hero{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-16px) rotate(1.5deg);}}
+
+/* Honey drip overlays */
+.honey-drip{
+  position:absolute;z-index:5;pointer-events:none;
+  bottom:140px;
+}
+.honey-drip svg .drip-path{
+  stroke:none;
+  fill:url(#drip-grad);
+  animation:drip-fall 3.5s ease-in infinite;
+  transform-origin:top center;
+}
+@keyframes drip-fall{
+  0%{transform:scaleY(0);opacity:1;}
+  55%{transform:scaleY(1);opacity:1;}
+  80%{transform:scaleY(1.05);opacity:0;}
+  100%{transform:scaleY(0);opacity:0;}
+}
+
+/* Floating badges */
+.float-badge{
+  position:absolute;z-index:6;
+  background:linear-gradient(135deg,rgba(254,243,208,0.95),rgba(253,230,138,0.9));
+  border:1px solid rgba(184,106,0,0.25);
+  border-radius:20px;
+  padding:12px 18px;
+  box-shadow:0 12px 40px rgba(184,106,0,0.2),inset 0 1px 0 rgba(255,255,255,0.8);
+  display:flex;align-items:center;gap:10px;
+  font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:600;color:var(--comb);
+  white-space:nowrap;
+  animation:float-badge 4s ease-in-out infinite;
+}
+.badge-iso{top:8%;left:-2%;animation-delay:0s;}
+.badge-milk{bottom:14%;right:-4%;animation-delay:1.4s;}
+@keyframes float-badge{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.float-badge .b-ico{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  display:grid;place-items:center;flex-shrink:0;
+  box-shadow:0 4px 10px rgba(184,106,0,0.4);
+}
+
+.scroll-cue{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--honey-dark);
+}
+.scroll-cue .s-line{width:1px;height:36px;background:linear-gradient(var(--honey-dark),transparent);position:relative;overflow:hidden;}
+.scroll-cue .s-drop{position:absolute;left:-2px;top:-8px;width:5px;height:5px;border-radius:50%;background:var(--honey);animation:fall 2s ease-in infinite;}
+@keyframes fall{0%{top:-8px;opacity:0;}20%{opacity:1;}100%{top:36px;opacity:0;}}
+
+/* ── HONEY WAVE DIVIDER ── */
+.honey-wave{
+  display:block;width:100%;overflow:hidden;line-height:0;
+  position:relative;z-index:1;margin-top:-2px;
+}
+.honey-wave svg{display:block;width:100%;height:60px;}
+
+/* ── SECTION BASE ── */
+section{position:relative;padding:120px 5vw;}
+.section-head{max-width:660px;margin:0 auto 68px;text-align:center;}
+.section-head .eyebrow{display:block;margin-bottom:16px;}
+.section-head h2{
+  font-size:clamp(1.9rem,3.6vw,3.1rem);margin-bottom:18px;
+  background:linear-gradient(135deg,var(--comb),var(--honey-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.section-head p{color:var(--comb-mid);font-size:1.04rem;line-height:1.75;font-weight:300;}
+
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .85s cubic-bezier(.2,.6,.2,1),transform .85s cubic-bezier(.2,.6,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-stagger>*{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);}
+.reveal-stagger.in>*{opacity:1;transform:translateY(0);}
+
+/* ── ABOUT ── */
+.about-section{background:var(--honey-pale);}
+.about-wrap{
+  display:grid;grid-template-columns:1fr 1fr;max-width:1280px;margin:0 auto;
+  border-radius:40px;overflow:hidden;
+  border:1px solid rgba(184,106,0,0.2);
+  box-shadow:var(--shadow-deep);
+  background:var(--comb);
+}
+.about-img{position:relative;min-height:500px;overflow:hidden;}
+.about-img img{
+  width:100%;height:100%;object-fit:cover;position:absolute;inset:0;
+  transition:transform 1.4s cubic-bezier(.2,.7,.2,1);
+  filter:sepia(20%) saturate(1.1);
+}
+.about-img:hover img{transform:scale(1.07);}
+.about-img::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(170deg,rgba(184,106,0,0.3) 0%,transparent 40%,rgba(26,12,0,0.75) 100%);
+}
+.about-badge{
+  position:absolute;bottom:28px;left:28px;z-index:2;
+  background:rgba(254,243,208,0.15);
+  border:1px solid rgba(245,185,66,0.5);
+  backdrop-filter:blur(8px);
+  border-radius:14px;padding:10px 16px;
+  font-family:'DM Sans',sans-serif;color:var(--wax);font-size:0.78rem;font-weight:500;
+  display:flex;align-items:center;gap:10px;
+}
+.ab-star{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  display:grid;place-items:center;flex-shrink:0;
+}
+
+.about-content{
+  padding:70px 60px;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(160deg,var(--comb) 0%,#2A1200 100%);
+}
+.about-content .eyebrow{color:var(--honey-light);}
+.about-content h2{
+  color:var(--wax);font-size:clamp(1.7rem,2.8vw,2.5rem);margin:18px 0 24px;
+  background:none;-webkit-text-fill-color:var(--wax);
+}
+.about-content p{color:rgba(249,228,170,0.8);line-height:1.8;margin-bottom:18px;font-size:1.01rem;font-weight:300;}
+
+.about-stats{display:flex;gap:0;margin-top:36px;border-top:1px solid rgba(232,146,10,0.25);padding-top:32px;}
+.about-stats>div{flex:1;text-align:center;position:relative;}
+.about-stats>div:not(:last-child)::after{
+  content:"";position:absolute;right:0;top:10%;height:80%;width:1px;
+  background:linear-gradient(var(--honey),var(--honey-dark));opacity:0.3;
+}
+.about-stats .stat-num{
+  font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--honey-light),var(--honey));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.about-stats .stat-lbl{
+  font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(232,146,10,0.7);margin-top:6px;display:block;
+}
+.counter{display:inline-block;}
+
+/* ── PRODUCTS ── */
+.products{background:var(--pollen);}
+.reel-track{
+  display:flex;gap:28px;overflow-x:auto;padding-bottom:20px;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  /* Fade edges */
+  mask-image:linear-gradient(90deg,transparent 0,black 3%,black 97%,transparent 100%);
+}
+.reel-track::-webkit-scrollbar{display:none;}
+
+.product-card{
+  flex:0 0 295px;scroll-snap-align:start;
+  background:linear-gradient(170deg,var(--pollen),var(--honey-pale));
+  border-radius:28px;
+  border:1px solid rgba(184,106,0,0.18);
+  overflow:hidden;position:relative;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease;
+  box-shadow:0 4px 20px rgba(184,106,0,0.1);
+}
+.product-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--honey-dark),var(--honey),var(--honey-light));
+  opacity:0;transition:opacity .4s ease;
+}
+.product-card:hover{
+  transform:translateY(-12px);
+  box-shadow:0 32px 64px -20px rgba(184,106,0,0.4),0 0 0 1px rgba(184,106,0,0.25);
+}
+.product-card:hover::before{opacity:1;}
+
+.pc-media{
+  height:240px;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--wax),var(--honey-pale));
+}
+.pc-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .7s ease;}
+.product-card:hover .pc-media img{transform:scale(1.12) rotate(1.5deg);filter:saturate(1.15) brightness(1.04);}
+
+/* Honey drip cap between image and text */
+.pc-drip{
+  position:absolute;bottom:-1px;left:0;width:100%;z-index:2;
+  height:28px;overflow:hidden;
+}
+.pc-drip::before{
+  content:"";display:block;width:100%;height:100%;
+  background:linear-gradient(170deg,var(--pollen),var(--honey-pale));
+  clip-path:ellipse(55% 100% at 50% 100%);
+}
+
+.pc-tag{
+  position:absolute;top:14px;right:14px;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  color:var(--pollen);font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;
+  padding:6px 14px;border-radius:20px;z-index:3;
+  box-shadow:0 4px 12px rgba(184,106,0,0.45);
+}
+.pc-body{padding:22px 24px 26px;}
+.pc-body h3{font-size:1.18rem;margin-bottom:8px;color:var(--comb);}
+.pc-body p{font-size:0.87rem;color:var(--comb-mid);line-height:1.6;margin-bottom:16px;font-weight:300;}
+.pc-foot{display:flex;align-items:center;justify-content:space-between;}
+.pc-foot .pc-flavour{
+  font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--honey-dark);
+}
+.pc-arrow{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(184,106,0,0.35);
+  display:grid;place-items:center;transition:.35s;
+  background:transparent;
+}
+.product-card:hover .pc-arrow{
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  border-color:var(--honey);
+  box-shadow:0 6px 18px rgba(184,106,0,0.45);
+}
+.product-card:hover .pc-arrow svg path{stroke:var(--pollen);}
+
+.reel-controls{display:flex;justify-content:center;gap:14px;margin-top:36px;}
+.reel-btn{
+  width:52px;height:52px;border-radius:50%;cursor:pointer;
+  border:1.5px solid rgba(184,106,0,0.4);
+  display:grid;place-items:center;transition:.3s;background:transparent;
+}
+.reel-btn:hover{
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  border-color:var(--honey);
+  box-shadow:0 8px 20px rgba(184,106,0,0.4);
+}
+.reel-btn:hover svg path{stroke:var(--pollen);}
+
+/* ── WHY US ── */
+.why-section{background:var(--honey-pale);}
+.why-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:28px;
+}
+.why-card{
+  background:linear-gradient(160deg,var(--pollen),var(--wax) 140%);
+  border:1px solid rgba(184,106,0,0.2);
+  border-radius:28px;
+  padding:44px 30px;
+  position:relative;overflow:hidden;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .45s ease;
+  box-shadow:0 4px 20px rgba(184,106,0,0.08);
+}
+.why-card::after{
+  content:"";position:absolute;
+  top:-60px;right:-60px;width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,146,10,0.12),transparent 70%);
+  transition:transform .6s ease;
+}
+.why-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(184,106,0,0.22);}
+.why-card:hover::after{transform:scale(1.8);}
+
+.why-icon{
+  width:60px;height:60px;border-radius:18px;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  display:grid;place-items:center;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(184,106,0,0.4);
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1);
+}
+.why-card:hover .why-icon{transform:rotate(-10deg) scale(1.1);}
+.why-card h3{font-size:1.12rem;margin-bottom:12px;color:var(--comb);}
+.why-card p{font-size:0.9rem;color:var(--comb-mid);line-height:1.65;font-weight:300;}
+
+/* ── GALLERY ── */
+.gallery{padding:120px 0;background:var(--pollen);overflow:hidden;}
+.gallery .section-head{padding:0 5vw;}
+.marquee-row{display:flex;gap:22px;width:max-content;margin-bottom:22px;}
+.marquee-row.left{animation:scrollLeft 40s linear infinite;}
+.marquee-row.right{animation:scrollRight 35s linear infinite;}
+.gallery:hover .marquee-row{animation-play-state:paused;}
+@keyframes scrollLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes scrollRight{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+
+.g-item{
+  width:268px;height:330px;border-radius:26px;overflow:hidden;flex-shrink:0;position:relative;
+  box-shadow:0 20px 48px rgba(184,106,0,0.2);
+  border:1px solid rgba(184,106,0,0.15);
+}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease;}
+.g-item:hover img{transform:scale(1.14);filter:saturate(1.2) brightness(1.05);}
+.g-item::before{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(175deg,rgba(232,146,10,0.15) 0%,transparent 35%,rgba(26,12,0,0.7) 100%);
+}
+.g-item .g-label{
+  position:absolute;bottom:18px;left:20px;z-index:2;
+  color:var(--wax);font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;
+}
+
+/* ── CTA STRIP ── */
+.cta-strip{
+  max-width:1260px;margin:0 auto;border-radius:36px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(130deg,var(--honey-dark) 0%,#7A3F00 45%,var(--comb) 100%);
+  padding:88px 7vw;text-align:center;
+  border:1px solid rgba(184,106,0,0.3);
+  box-shadow:0 40px 80px rgba(184,106,0,0.3);
+}
+/* Honeycomb texture overlay */
+.cta-strip::before{
+  content:"";position:absolute;inset:0;opacity:0.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32zm0 34L0 84V52l28 16 28-16v32z' stroke='%23F5B942' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-size:56px 100px;
+}
+/* Glow orbs inside CTA */
+.cta-strip::after{
+  content:"";position:absolute;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,185,66,0.2),transparent 70%);
+  top:-200px;right:-100px;animation:slowspin 35s linear infinite;
+}
+@keyframes slowspin{to{transform:rotate(360deg);}}
+.cta-strip h2{
+  color:var(--wax);font-size:clamp(2rem,4.2vw,3.2rem);margin-bottom:20px;position:relative;z-index:2;
+  background:none;-webkit-text-fill-color:var(--wax);
+}
+.cta-strip p{max-width:530px;margin:0 auto 40px;color:rgba(249,228,170,0.85);line-height:1.75;position:relative;z-index:2;font-weight:300;}
+.cta-strip .btn-light{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--wax),var(--honey-glow));
+  color:var(--comb);
+  padding:18px 40px;border-radius:50px;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.95rem;
+  position:relative;z-index:2;
+  box-shadow:0 12px 36px rgba(0,0,0,0.25);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;
+}
+.cta-strip .btn-light:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,0.35);}
+.cta-strip .btn-light svg{transition:transform .3s ease;}
+.cta-strip .btn-light:hover svg{transform:translateX(5px);}
+
+/* ── FOOTER ── */
+footer{background:var(--comb);color:var(--wax);padding:96px 5vw 32px;margin-top:0;}
+.footer-grid{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:52px;
+  padding-bottom:64px;border-bottom:1px solid rgba(184,106,0,0.2);
+}
+.footer-logo{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;
+  color:var(--wax);margin-bottom:20px;
+}
+footer p.desc{font-size:0.91rem;line-height:1.75;color:rgba(249,228,170,0.65);max-width:300px;font-weight:300;}
+footer h4{
+  font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--honey),var(--honey-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:22px;font-weight:400;
+}
+footer ul{list-style:none;}
+footer ul li{margin-bottom:13px;}
+footer ul a{font-size:0.91rem;color:rgba(249,228,170,0.65);transition:.3s;font-weight:300;display:inline-block;}
+footer ul a:hover{color:var(--honey-light);transform:translateX(5px);}
+.footer-contact li{display:flex;gap:12px;font-size:0.9rem;color:rgba(249,228,170,0.7);line-height:1.6;margin-bottom:18px;align-items:flex-start;font-weight:300;}
+
+.social-row{display:flex;gap:12px;margin-top:26px;}
+.social-row a{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(232,146,10,0.3);
+  display:grid;place-items:center;transition:.3s;
+}
+.social-row a:hover{background:linear-gradient(135deg,var(--honey-dark),var(--honey));border-color:var(--honey);transform:translateY(-3px);box-shadow:0 8px 20px rgba(184,106,0,0.4);}
+
+.footer-bottom{
+  max-width:1280px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:28px;flex-wrap:wrap;gap:14px;
+}
+.footer-bottom p{font-size:0.82rem;color:rgba(232,146,10,0.5);}
+.footer-bottom .legal{display:flex;gap:24px;}
+.footer-bottom .legal a{font-size:0.82rem;color:rgba(232,146,10,0.5);transition:.3s;}
+.footer-bottom .legal a:hover{color:var(--honey-light);}
+
+/* Back to top */
+.to-top{
+  position:fixed;bottom:30px;right:30px;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+  display:grid;place-items:center;z-index:500;cursor:pointer;
+  opacity:0;transform:translateY(20px);transition:.4s;
+  box-shadow:0 8px 24px rgba(184,106,0,0.5);
+}
+.to-top.show{opacity:1;transform:translateY(0);}
+.to-top:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(184,106,0,0.6);}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media(max-width:1024px){
+  .why-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:42px;}
+  .hero-visual .float-badge.badge-iso{left:0%;}
+  .hero-visual .float-badge.badge-milk{right:0%;}
+}
+
+@media(max-width:900px){
+  .hero{padding:130px 5vw 80px;}
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:52px;}
+  .hero-eyebrow{justify-content:center;}
+  .hero p.lede{margin-left:auto;margin-right:auto;}
+  .hero-actions{justify-content:center;}
+  .hero-stats{justify-content:center;gap:28px;}
+  .hero-stats div::after{display:none;}
+  .hero-visual{height:420px;}
+  .hex-ring{width:320px;height:320px;}
+  .hex-ring-inner{width:240px;height:240px;}
+  .hero-glow{width:260px;height:260px;}
+  .hero-img-frame{width:200px;height:310px;}
+  .float-badge.badge-iso{left:1%;top:5%;}
+  .float-badge.badge-milk{right:1%;bottom:8%;}
+  .about-wrap{grid-template-columns:1fr;}
+  .about-img{min-height:300px;}
+  .about-content{padding:48px 40px;}
+}
+
+@media(max-width:680px){
+  nav ul{
+    position:fixed;top:0;right:0;height:100vh;width:82%;
+    background:linear-gradient(160deg,var(--pollen),var(--honey-pale));
+    flex-direction:column;justify-content:center;gap:28px;
+    transform:translateX(100%);transition:transform .4s ease;
+    box-shadow:-24px 0 60px rgba(184,106,0,0.2);z-index:1050;
+  }
+  nav ul.open{transform:translateX(0);}
+  .menu-toggle{display:flex;}
+  .nav-cta{display:none;}
+  nav ul a{font-size:1.1rem;}
+  nav ul .nav-cta-mobile{
+    display:inline-flex;
+    background:linear-gradient(135deg,var(--honey-dark),var(--honey));
+    color:var(--pollen);padding:13px 28px;border-radius:30px;font-size:0.9rem;font-weight:600;
+    box-shadow:0 8px 22px rgba(184,106,0,0.4);
+  }
+  section{padding:76px 5vw;}
+  .hero{padding:110px 5vw 70px;min-height:auto;}
+  .hero h1{font-size:clamp(2rem,8vw,2.8rem);}
+  .hero p.lede{font-size:0.97rem;margin-bottom:28px;}
+  .hero-actions{flex-direction:column;align-items:center;gap:14px;margin-bottom:36px;}
+  .btn-primary{width:100%;max-width:320px;justify-content:center;padding:15px 26px;}
+  .btn-ghost{justify-content:center;}
+  .hero-stats{gap:18px;justify-content:space-between;}
+  .hero-stats .num{font-size:1.75rem;}
+  .hero-visual{height:330px;}
+  .hex-ring{width:260px;height:260px;}
+  .hex-ring-inner{width:190px;height:190px;}
+  .hero-glow{width:210px;height:210px;}
+  .hero-img-frame{width:160px;height:250px;}
+  .float-badge{font-size:0.68rem;padding:8px 12px;gap:7px;}
+  .float-badge.badge-iso{left:-1%;top:3%;}
+  .float-badge.badge-milk{right:-1%;bottom:5%;}
+  .section-head{margin-bottom:46px;}
+  .section-head h2{font-size:clamp(1.65rem,7vw,2.3rem);}
+  .about-content{padding:36px 24px;}
+  .why-grid{grid-template-columns:1fr;gap:20px;}
+  .why-card{padding:36px 26px;}
+  .cta-strip{border-radius:28px;padding:66px 6vw;}
+  footer{padding:72px 5vw 28px;}
+  .footer-grid{grid-template-columns:1fr;gap:38px;}
+  .footer-bottom{flex-direction:column;text-align:center;gap:10px;}
+  .to-top{bottom:20px;right:20px;width:46px;height:46px;}
+}
+
+@media(max-width:420px){
+  .hero h1{font-size:1.9rem;}
+  .hero-visual{height:280px;}
+  .hero-img-frame{width:140px;height:220px;}
+  .hex-ring{width:220px;height:220px;}
+  .hex-ring-inner{width:155px;height:155px;}
+  .hero-glow{width:175px;height:175px;}
+  .float-badge{display:none;}
+  .hero-stats{gap:12px;}
+  .hero-stats .num{font-size:1.5rem;}
+  section{padding:62px 5vw;}
+  .product-card{flex:0 0 260px;}
+  .pc-media{height:210px;}
+}
+
+@media(hover:none){#drip-canvas{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- Honey drip SVG defs (referenced from CSS via inline SVG) -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden;">
+  <defs>
+    <linearGradient id="drip-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5B942" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#E8920A" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#B86A00" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="hex-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F5B942"/>
+      <stop offset="100%" stop-color="#B86A00"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<canvas id="drip-canvas"></canvas>
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ======= HEADER ======= -->
+<header id="siteHeader">
+  <a href="#home" class="logo">
+    <span class="logo-hex">
+      <!-- Hexagon logo mark -->
+      <svg width="42" height="42" viewBox="0 0 42 42">
+        <polygon points="21,2 39,11.5 39,30.5 21,40 3,30.5 3,11.5" fill="url(#hex-grad)" stroke="rgba(26,12,0,0.2)" stroke-width="1"/>
+        <text x="21" y="26.5" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#FEF3D0">M</text>
+      </svg>
+    </span>
+    <span>
+      Mithas
+      <span class="tag">Fresh &amp; Healthy</span>
+    </span>
+  </a>
+  <nav>
+    <ul id="navList">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta-mobile" style="display:none;">Find a Store</a></li>
+    </ul>
+  </nav>
+  <a href="#contact" class="nav-cta">Find a Store</a>
+  <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+</header>
+
+<!-- ======= HERO ======= -->
+<section class="hero" id="home" style="padding-top:0;">
+  <div class="hero-comb-bg"></div>
+  <div class="hero-orb hero-orb1"></div>
+  <div class="hero-orb hero-orb2"></div>
+
+  <div class="hero-grid">
+    <!-- TEXT SIDE -->
+    <div>
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        <span class="eyebrow">ISO 9001:2008 Certified &middot; Tamil Nadu</span>
+      </div>
+      <h1>
+        True Milk.<br>
+        <em>True Ice Cream.<span class="ink-line"></span></em><br>
+        Made Slowly, Loved Fast.
+      </h1>
+      <p class="lede">From hand-dipped stick kulfi to family tubs, every Mithas scoop starts with fresh dairy and patience — no shortcuts, no fillers, just cream that remembers where it came from.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn-primary">
+          Explore Flavours
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#about" class="btn-ghost">
+          <span class="play-ring">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#3D1F00"/></svg>
+          </span>
+          Our Story
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="num"><span class="counter" data-target="30">0</span>+</span>
+          <span class="lbl">Years of Craft</span>
+        </div>
+        <div>
+          <span class="num"><span class="counter" data-target="18">0</span></span>
+          <span class="lbl">Product Lines</span>
+        </div>
+        <div>
+          <span class="num"><span class="counter" data-target="100">0</span>%</span>
+          <span class="lbl">Fresh Dairy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISUAL SIDE -->
+    <div class="hero-visual">
+      <div class="hex-ring"></div>
+      <div class="hex-ring-inner"></div>
+      <div class="hero-glow"></div>
+
+      <!-- Orbiting honeycomb dots -->
+      <div style="position:absolute;width:400px;height:400px;animation:spin-ring 18s linear infinite;" id="orbitRing"></div>
+
+      <!-- Float badges -->
+      <div class="float-badge badge-iso">
+        <span class="b-ico">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#FEF3D0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        ISO Certified Unit
+      </div>
+      <div class="float-badge badge-milk">
+        <span class="b-ico">
+          <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#FEF3D0"/></svg>
+        </span>
+        Zero Added Fillers
+      </div>
+
+      <!-- Hero image in honey-jar shape -->
+      <div class="hero-img-frame">
+        <img
+          src="https://images.unsplash.com/photo-1629885456634-97bd8b893c0a?w=520&q=85"
+          alt="Pista kulfi ice cream on stick"
+          loading="eager"
+          onerror="this.src='https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=520&q=85'"
+        />
+      </div>
+
+      <!-- Honey drip SVG -->
+      <div class="honey-drip" style="left:calc(50% - 50px);">
+        <svg width="40" height="70" viewBox="0 0 40 70">
+          <path class="drip-path" d="M14,0 Q12,30 8,45 Q6,55 10,62 Q14,70 20,70 Q26,70 30,62 Q34,55 32,45 Q28,30 26,0 Z" fill="url(#drip-grad)" style="animation-delay:0.2s"/>
+        </svg>
+      </div>
+      <div class="honey-drip" style="left:calc(50% + 28px);">
+        <svg width="24" height="52" viewBox="0 0 24 52">
+          <path class="drip-path" d="M8,0 Q7,20 5,30 Q3,38 6,44 Q9,52 12,52 Q15,52 18,44 Q21,38 19,30 Q17,20 16,0 Z" fill="url(#drip-grad)" style="animation-delay:1.6s;animation-duration:3.8s"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="s-line"><span class="s-drop"></span></div>
+  </div>
+</section>
+
+<!-- Honey wave divider -->
+<div class="honey-wave">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="wave-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FFFBEF"/>
+        <stop offset="100%" stop-color="#FEF3D0"/>
+      </linearGradient>
+    </defs>
+    <!-- Dripping honey edge -->
+    <path d="M0,0 H1440 V18
+      C1400,18 1388,60 1355,60 C1322,60 1318,22 1285,22
+      C1252,22 1245,58 1212,58 C1179,58 1175,20 1142,20
+      C1109,20 1102,55 1069,55 C1036,55 1032,18 999,18
+      C966,18 960,52 927,52 C894,52 890,15 857,15
+      C824,15 818,50 785,50 C752,50 748,16 715,16
+      C682,16 676,54 643,54 C610,54 607,14 574,14
+      C541,14 535,48 502,48 C469,48 465,12 432,12
+      C399,12 393,46 360,46 C327,46 324,10 291,10
+      C258,10 252,44 219,44 C186,44 183,8 150,8
+      C117,8 111,42 78,42 C45,42 42,6 0,6 Z"
+      fill="url(#wave-grad)"/>
+  </svg>
+</div>
+
+<!-- ======= ABOUT ======= -->
+<section id="about" class="about-section" style="padding-top:90px;">
+  <div class="section-head reveal">
+    <span class="eyebrow">About Mithas</span>
+    <h2>A Family Recipe, Scaled With Care</h2>
+    <p>Mithas began in a small Tamil Nadu kitchen with one belief: ice cream is only as good as the milk in it. Three decades on, that belief still runs every line in our ISO-certified unit.</p>
+  </div>
+
+  <div class="about-wrap reveal">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=900&q=85" alt="Artisan ice cream" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900&q=85'"/>
+      <div class="about-badge">
+        <span class="ab-star">
+          <svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#FEF3D0"/></svg>
+        </span>
+        Est. since the early days of Vellavedu Village
+      </div>
+    </div>
+    <div class="about-content">
+      <span class="eyebrow">Our Story</span>
+      <h2>From Vellavedu Village To Your Freezer</h2>
+      <p>Every batch is built on fresh, hygienic dairy sourced close to home, then crafted in small runs so taste never gets sacrificed for speed. Our production unit can scale for festival demand without ever cutting a corner on quality.</p>
+      <p>Whether it's a stick kulfi melting on a summer evening or a family tub shared after dinner, the goal stays the same — milk that tastes like milk.</p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num"><span class="counter" data-target="30">0</span>+</div>
+          <span class="stat-lbl">Years Crafting</span>
+        </div>
+        <div>
+          <div class="stat-num"><span class="counter" data-target="18">0</span></div>
+          <span class="stat-lbl">Product Lines</span>
+        </div>
+        <div>
+          <div class="stat-num"><span class="counter" data-target="9001">0</span></div>
+          <span class="stat-lbl">ISO Certified</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave into products -->
+<div class="honey-wave" style="transform:scaleY(-1);">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M0,0 H1440 V14 C1410,14 1395,52 1365,52 C1335,52 1328,16 1298,16 C1268,16 1260,50 1230,50 C1200,50 1194,12 1164,12 C1134,12 1126,46 1096,46 C1066,46 1060,10 1030,10 C1000,10 992,44 962,44 C932,44 926,8 896,8 C866,8 858,42 828,42 C798,42 792,6 762,6 C732,6 724,40 694,40 C664,40 658,4 628,4 C598,4 590,38 560,38 C530,38 524,2 494,2 C464,2 456,36 426,36 C396,36 390,0 360,0 C330,0 322,34 292,34 C262,34 256,-2 226,-2 C196,-2 188,32 158,32 C128,32 122,-4 92,-4 C62,-4 54,30 0,14 Z"
+    fill="var(--pollen)"/>
+  </svg>
+</div>
+
+<!-- ======= PRODUCTS ======= -->
+<section class="products" id="products">
+  <div class="section-head reveal">
+    <span class="eyebrow">The Range</span>
+    <h2>Eighteen Ways To Say Mithas</h2>
+    <p>Drag or scroll through the line-up — from pocket-sized mini cones to party-ready tubs.</p>
+  </div>
+
+  <div class="reel-track reveal-stagger" id="reelTrack">
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=600&q=85" alt="Large cone" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Bestseller</span>
+      <div class="pc-body">
+        <h3>Large Cone</h3>
+        <p>Vanilla, chocolate, butterscotch, dry fruit, kesar pista &amp; more — six flavours deep.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">6 Flavours</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=85" alt="Mini cone" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">50ml</span>
+      <div class="pc-body">
+        <h3>Mini Cone</h3>
+        <p>The same big flavour, sized for kids, queues, and second helpings.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">3 Flavours</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=85" alt="Bars" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">On The Go</span>
+      <div class="pc-body">
+        <h3>Bars</h3>
+        <p>Chocolate-coated and fruit bars built for a hot afternoon — no spoon required.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">4 Flavours</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&q=85" alt="Big cups" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Solo Serve</span>
+      <div class="pc-body">
+        <h3>Big Cups</h3>
+        <p>A generous, no-fuss scoop in a cup — pure vanilla, pure cream.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">Single Serve</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=85" alt="Family tub" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Family Size</span>
+      <div class="pc-body">
+        <h3>Family Pack (Tubs)</h3>
+        <p>Sunday-dinner sized tubs of real vanilla, made to be shared — or not.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">Multiple Sizes</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1629885456634-97bd8b893c0a?w=600&q=85" alt="Stick kulfi" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Signature</span>
+      <div class="pc-body">
+        <h3>Stick Kulfi</h3>
+        <p>Our namesake — malai, rose, black currant, fruit &amp; cream, vanilla, and chocolate.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">6 Flavours</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&q=85" alt="Vanilla ball" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Classic</span>
+      <div class="pc-body">
+        <h3>Vanilla Ball</h3>
+        <p>A round scoop of fresh-cream vanilla. Nothing extra needed.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">Single Flavour</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?w=600&q=85" alt="Sandwich" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Nostalgic</span>
+      <div class="pc-body">
+        <h3>Sandwich Ice Cream</h3>
+        <p>Chocolate wafer, cream centre — the after-school favourite, still going strong.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">Classic Combo</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="pc-media">
+        <img src="https://images.unsplash.com/photo-1614356026256-4e7d08f1f5b0?w=600&q=85" alt="Pot kulfi" loading="lazy"/>
+        <div class="pc-drip"></div>
+      </div>
+      <span class="pc-tag">Low Calorie</span>
+      <div class="pc-body">
+        <h3>Pot Kulfi</h3>
+        <p>Our low-calorie, premium pot kulfi — traditional taste, lighter finish.</p>
+        <div class="pc-foot">
+          <span class="pc-flavour">Premium Pot</span>
+          <span class="pc-arrow"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="reel-controls">
+    <div class="reel-btn" id="reelPrev"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="reel-btn" id="reelNext"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+</section>
+
+<!-- ======= WHY US ======= -->
+<section id="why" class="why-section">
+  <div class="section-head reveal">
+    <span class="eyebrow">Why Mithas</span>
+    <h2>What Makes The Cream Different</h2>
+  </div>
+  <div class="why-grid reveal-stagger">
+    <div class="why-card">
+      <div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z" fill="#FEF3D0"/></svg></div>
+      <h3>ISO 9001:2008 Certified</h3>
+      <p>Every batch follows a documented, audited quality process — not just a promise on the label.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 9l7-6 7 6v9a2 2 0 01-2 2H7a2 2 0 01-2-2z" stroke="#FEF3D0" stroke-width="2" fill="none" stroke-linejoin="round"/></svg></div>
+      <h3>Local Dairy Sourcing</h3>
+      <p>Milk arrives fresh from nearby farms, keeping the supply chain short and the flavour honest.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#FEF3D0"/></svg></div>
+      <h3>18 Product Lines</h3>
+      <p>From mini cones to party tubs, the range is built for kids' birthdays and festival counters alike.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="#FEF3D0" stroke-width="2" fill="none"/><path d="M12 7v5l4 2" stroke="#FEF3D0" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <h3>Small-Batch Freshness</h3>
+      <p>We scale up production without stretching ingredients — batches stay small and consistent.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======= GALLERY ======= -->
+<section class="gallery" id="gallery">
+  <div class="section-head reveal">
+    <span class="eyebrow">The Gallery</span>
+    <h2>A Closer Look At Every Scoop</h2>
+    <p>Hover to pause, then take it all in — the splashes, the swirls, the slow melt.</p>
+  </div>
+
+  <div class="marquee-row left">
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=560&q=80" alt="Cone" loading="lazy"/><span class="g-label">Large Cone</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1629885456634-97bd8b893c0a?w=560&q=80" alt="Kulfi" loading="lazy"/><span class="g-label">Stick Kulfi</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=560&q=80" alt="Scoops" loading="lazy"/><span class="g-label">Family Pack Tub</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=560&q=80" alt="Bars" loading="lazy"/><span class="g-label">Choco &amp; Fruit Bars</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=560&q=80" alt="Cup" loading="lazy"/><span class="g-label">Big Cup — Vanilla</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=560&q=80" alt="Cone" loading="lazy"/><span class="g-label">Large Cone</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1629885456634-97bd8b893c0a?w=560&q=80" alt="Kulfi" loading="lazy"/><span class="g-label">Stick Kulfi</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=560&q=80" alt="Scoops" loading="lazy"/><span class="g-label">Family Pack Tub</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=560&q=80" alt="Bars" loading="lazy"/><span class="g-label">Choco &amp; Fruit Bars</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=560&q=80" alt="Cup" loading="lazy"/><span class="g-label">Big Cup — Vanilla</span></div>
+  </div>
+
+  <div class="marquee-row right">
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?w=560&q=80" alt="Sandwich" loading="lazy"/><span class="g-label">Sandwich Ice Cream</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1614356026256-4e7d08f1f5b0?w=560&q=80" alt="Pot kulfi" loading="lazy"/><span class="g-label">Pot Kulfi</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=560&q=80" alt="Mini" loading="lazy"/><span class="g-label">Mini Cone Trio</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=560&q=80" alt="Vanilla" loading="lazy"/><span class="g-label">Vanilla Ball</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=560&q=80" alt="Cassata" loading="lazy"/><span class="g-label">Cassata Ice Cream</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?w=560&q=80" alt="Sandwich" loading="lazy"/><span class="g-label">Sandwich Ice Cream</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1614356026256-4e7d08f1f5b0?w=560&q=80" alt="Pot kulfi" loading="lazy"/><span class="g-label">Pot Kulfi</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=560&q=80" alt="Mini" loading="lazy"/><span class="g-label">Mini Cone Trio</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=560&q=80" alt="Vanilla" loading="lazy"/><span class="g-label">Vanilla Ball</span></div>
+    <div class="g-item"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=560&q=80" alt="Cassata" loading="lazy"/><span class="g-label">Cassata Ice Cream</span></div>
+  </div>
+</section>
+
+<!-- ======= CTA ======= -->
+<section style="padding-top:0;padding-bottom:0;">
+  <div class="cta-strip reveal">
+    <h2>Hot Day? Cold Mithas.</h2>
+    <p>Find your nearest stockist or get in touch for bulk orders, distributorships, and party packs.</p>
+    <a href="#contact" class="btn-light">
+      Get In Touch
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ======= FOOTER ======= -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <svg width="38" height="38" viewBox="0 0 42 42">
+          <polygon points="21,2 39,11.5 39,30.5 21,40 3,30.5 3,11.5" fill="url(#hex-grad)" opacity="0.9"/>
+          <text x="21" y="26.5" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="700" fill="#FEF3D0">M</text>
+        </svg>
+        Mithas
+      </div>
+      <p class="desc">An ISO 9001:2008 certified manufacturer of ice cream, stick kulfi, and pot kulfi — made with fresh, hygienic ingredients in Vellavedu Village, Chennai.</p>
+      <div class="social-row">
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M14 9h3V6h-3c-2 0-3.5 1.5-3.5 3.5V12H8v3h2.5v6h3v-6H16l.5-3h-3V9.8c0-.5.2-.8.5-.8z" fill="rgba(249,228,170,0.8)"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" stroke="rgba(249,228,170,0.8)" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="4" stroke="rgba(249,228,170,0.8)" stroke-width="1.6" fill="none"/><circle cx="17.2" cy="6.8" r="1.1" fill="rgba(249,228,170,0.8)"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 3a9 9 0 00-7.7 13.6L3 21l4.6-1.2A9 9 0 1012 3z" stroke="rgba(249,228,170,0.8)" stroke-width="1.6" fill="none"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#products">Large Cone</a></li>
+        <li><a href="#products">Stick Kulfi</a></li>
+        <li><a href="#products">Family Pack (Tubs)</a></li>
+        <li><a href="#products">Pot Kulfi</a></li>
+        <li><a href="#products">Cassata Ice Cream</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#">Terms &amp; Conditions</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Reach Us</h4>
+      <ul class="footer-contact">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z" stroke="var(--honey)" stroke-width="1.6" fill="none"/><circle cx="12" cy="9" r="2.4" stroke="var(--honey)" stroke-width="1.6" fill="none"/></svg>
+          Vellavedu Village, Chennai, Tamil Nadu — 600124, India
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.69 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.33 1.85.56 2.81.69A2 2 0 0122 16.92z" stroke="var(--honey)" stroke-width="1.6" fill="none"/></svg>
+          +91 89256 22701
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path d="M4 4h16v16H4z" stroke="var(--honey)" stroke-width="1.6" fill="none"/><path d="M4 5l8 7 8-7" stroke="var(--honey)" stroke-width="1.6" fill="none"/></svg>
+          info@mithas.net.in
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Mithas. All Rights Reserved.</p>
+    <div class="legal">
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="#">Returns</a>
+    </div>
+  </div>
+</footer>
+
+<div class="to-top" id="toTop">
+  <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#FEF3D0" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<script>
+/* ── header scroll ── */
+const header=document.getElementById('siteHeader');
+const progressBar=document.getElementById('progressBar');
+const toTop=document.getElementById('toTop');
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+  progressBar.style.width=pct+'%';
+  header.classList.toggle('scrolled',window.scrollY>30);
+  toTop.classList.toggle('show',window.scrollY>600);
+},{passive:true});
+toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ── mobile nav ── */
+const menuToggle=document.getElementById('menuToggle');
+const navList=document.getElementById('navList');
+const navCtaMobile=navList.querySelector('.nav-cta-mobile');
+const updateNav=()=>{
+  const mob=window.innerWidth<=680;
+  if(navCtaMobile) navCtaMobile.style.display=mob?'inline-flex':'none';
+  if(!mob){navList.classList.remove('open');menuToggle.classList.remove('active');}
+};
+updateNav();
+window.addEventListener('resize',updateNav);
+menuToggle.addEventListener('click',()=>{navList.classList.toggle('open');menuToggle.classList.toggle('active');});
+navList.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navList.classList.remove('open');menuToggle.classList.remove('active');}));
+document.addEventListener('click',e=>{if(!header.contains(e.target)){navList.classList.remove('open');menuToggle.classList.remove('active');}});
+
+/* ── reveal ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-stagger').forEach(el=>io.observe(el));
+document.querySelectorAll('.reveal-stagger').forEach(g=>{
+  Array.from(g.children).forEach((k,i)=>k.style.transitionDelay=(i*0.1)+'s');
+});
+
+/* ── counters ── */
+const cio=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target,target=parseInt(el.dataset.target,10);
+      let cur=0;const inc=target/50;
+      const tick=()=>{cur+=inc;if(cur>=target){el.textContent=target.toLocaleString();return;}el.textContent=Math.floor(cur).toLocaleString();requestAnimationFrame(tick);};
+      tick();cio.unobserve(el);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('.counter').forEach(c=>cio.observe(c));
+
+/* ── reel ── */
+const reelTrack=document.getElementById('reelTrack');
+document.getElementById('reelNext').addEventListener('click',()=>reelTrack.scrollBy({left:330,behavior:'smooth'}));
+document.getElementById('reelPrev').addEventListener('click',()=>reelTrack.scrollBy({left:-330,behavior:'smooth'}));
+
+/* ── honey drip cursor particles ── */
+const canvas=document.getElementById('drip-canvas');
+const ctx=canvas.getContext('2d');
+let cw=canvas.width=window.innerWidth,ch=canvas.height=window.innerHeight;
+window.addEventListener('resize',()=>{cw=canvas.width=window.innerWidth;ch=canvas.height=window.innerHeight;});
+const isTouch=window.matchMedia('(hover:none)').matches;
+const prefersReducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+let particles=[],lastSpawn=0;
+const honeyColors=['232,146,10','245,185,66','184,106,0','253,230,138'];
+
+function spawnDrip(x,y){
+  if(particles.length>70)return;
+  const color=honeyColors[Math.floor(Math.random()*honeyColors.length)];
+  const r=3+Math.random()*3.5;
+  particles.push({
+    x,y,
+    vy:1.2+Math.random()*1.4,
+    vx:(Math.random()-.5)*.6,
+    r,baseR:r,
+    life:1,color,
+    /* elongated drip shape — drawn as ellipse stretched vertically */
+    elongation:1+Math.random()*1.5,
+  });
+}
+if(!isTouch&&!prefersReducedMotion){
+  window.addEventListener('mousemove',e=>{
+    const now=performance.now();
+    if(now-lastSpawn>30){spawnDrip(e.clientX,e.clientY);lastSpawn=now;}
+  });
+}
+function animateParticles(){
+  ctx.clearRect(0,0,cw,ch);
+  particles.forEach(p=>{
+    p.y+=p.vy;p.x+=p.vx;p.life-=0.016;
+    const a=Math.max(p.life,0)*0.65;
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    /* draw elongated drip blob */
+    ctx.beginPath();
+    ctx.ellipse(0,0,p.r*p.life,p.r*p.life*p.elongation,0,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.color},${a})`;
+    /* subtle glow */
+    ctx.shadowBlur=8;ctx.shadowColor=`rgba(${p.color},${a*.5})`;
+    ctx.fill();
+    ctx.restore();
+  });
+  particles=particles.filter(p=>p.life>0);
+  requestAnimationFrame(animateParticles);
+}
+if(!prefersReducedMotion) animateParticles();
+
+/* ── Orbiting hex dots (hero) ── */
+const orbitRing=document.getElementById('orbitRing');
+if(orbitRing){
+  const dots=6,r=180;
+  for(let i=0;i<dots;i++){
+    const angle=(i/dots)*Math.PI*2;
+    const d=document.createElement('div');
+    const size=8+Math.random()*6;
+    d.style.cssText=`
+      position:absolute;
+      width:${size}px;height:${size}px;
+      left:calc(50% + ${Math.cos(angle)*r}px - ${size/2}px);
+      top:calc(50% + ${Math.sin(angle)*r}px - ${size/2}px);
+      background:linear-gradient(135deg,#F5B942,#B86A00);
+      clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+      opacity:${0.4+Math.random()*0.4};
+    `;
+    orbitRing.appendChild(d);
+  }
+}
+</script>
+</body>
+</html>
