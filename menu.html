@@ -17,52 +17,62 @@
 
   <!-- ======= ICE CREAM PRELOADER ======= -->
   <div class="preloader" id="preloader">
+    <div class="preloader-bg-glow" aria-hidden="true"></div>
     <div class="preloader-inner">
-      <div class="preloader-cone">
-        <!-- Waffle Cone -->
-        <svg class="preloader-cone-svg" viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Cone body -->
-          <polygon points="60,195 15,65 105,65" fill="#D2A054" stroke="#9C6B28" stroke-width="2"/>
-          <!-- Cone cross-hatching -->
-          <path d="M25,80 L95,80 M32,95 L88,95 M39,110 L81,110 M46,125 L74,125 M50,140 L70,140 M54,155 L66,155 M57,170 L63,170 M18,70 L72,175 M102,70 L48,175" stroke="#B8863B" stroke-width="1.5" opacity="0.7"/>
-          <!-- Cone top rim -->
-          <ellipse cx="60" cy="67" rx="44" ry="10" fill="#B28038"/>
-          <!-- Ice cream scoops -->
-          <circle cx="60" cy="42" r="30" fill="#FCEAEC">
-            <animate attributeName="cy" values="100;42" dur="1.2s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </circle>
-          <circle cx="45" cy="25" r="20" fill="#FFF0E0">
-            <animate attributeName="cy" values="100;25" dur="1.2s" begin="0.15s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </circle>
-          <circle cx="75" cy="25" r="20" fill="#E8F5E9">
-            <animate attributeName="cy" values="100;25" dur="1.2s" begin="0.3s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </circle>
-          <circle cx="60" cy="10" r="18" fill="#FCE4EC">
-            <animate attributeName="cy" values="100;10" dur="1.2s" begin="0.45s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </circle>
-          <!-- Cherry on top -->
-          <circle cx="60" cy="-5" r="7" fill="#E31E24">
-            <animate attributeName="cy" values="100;-5" dur="1.2s" begin="0.6s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </circle>
-          <path d="M60,-5 Q65,-20 58,-25" stroke="#00833E" stroke-width="2" fill="none" stroke-linecap="round">
-            <animate attributeName="d" values="M60,100 Q65,90 58,85;M60,-5 Q65,-20 58,-25" dur="1.2s" begin="0.6s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
-          </path>
-        </svg>
-      </div>
-      <div class="preloader-text">
-        <span class="preloader-brand">Mithas</span>
-        <span class="preloader-tagline">True Milk. True Ice Cream.</span>
+      <div class="preloader-glass">
+        <div class="preloader-cone">
+          <svg class="preloader-cone-svg" viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="60,195 15,65 105,65" fill="#D2A054" stroke="#9C6B28" stroke-width="2"/>
+            <path d="M25,80 L95,80 M32,95 L88,95 M39,110 L81,110 M46,125 L74,125 M50,140 L70,140 M54,155 L66,155 M57,170 L63,170 M18,70 L72,175 M102,70 L48,175" stroke="#B8863B" stroke-width="1.5" opacity="0.7"/>
+            <ellipse cx="60" cy="67" rx="44" ry="10" fill="#B28038"/>
+            <circle cx="60" cy="42" r="30" fill="#FCEAEC">
+              <animate attributeName="cy" values="120;42" dur="1.4s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </circle>
+            <circle cx="45" cy="25" r="20" fill="#E8F4FF">
+              <animate attributeName="cy" values="120;25" dur="1.4s" begin="0.12s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </circle>
+            <circle cx="75" cy="25" r="20" fill="#D6EEFF">
+              <animate attributeName="cy" values="120;25" dur="1.4s" begin="0.24s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </circle>
+            <circle cx="60" cy="10" r="18" fill="#FCE4EC">
+              <animate attributeName="cy" values="120;10" dur="1.4s" begin="0.36s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </circle>
+            <circle cx="60" cy="-5" r="7" fill="#E31E24">
+              <animate attributeName="cy" values="120;-5" dur="1.4s" begin="0.48s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </circle>
+            <path d="M60,-5 Q65,-20 58,-25" stroke="#00833E" stroke-width="2" fill="none" stroke-linecap="round">
+              <animate attributeName="d" values="M60,120 Q65,110 58,105;M60,-5 Q65,-20 58,-25" dur="1.4s" begin="0.48s" fill="freeze" calcMode="spline" keySplines="0.34 1.56 0.64 1"/>
+            </path>
+          </svg>
+        </div>
+        <div class="preloader-text">
+          <span class="preloader-brand">Mithas</span>
+          <span class="preloader-tagline">True Milk. True Ice Cream.</span>
+        </div>
       </div>
     </div>
+    <div class="preloader-progress" aria-hidden="true">
+      <div class="preloader-progress-bar"></div>
+    </div>
   </div>
-
 
   <!-- Honey Drip SVG Gradients -->
   <svg width="0" height="0" style="position:absolute;overflow:hidden;">
     <defs>
+      <linearGradient id="wave-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#E8F7FF"/>
+        <stop offset="40%" stop-color="#30B5FF"/>
+        <stop offset="70%" stop-color="#2E3192"/>
+        <stop offset="100%" stop-color="#E8F7FF"/>
+      </linearGradient>
+      <linearGradient id="drip-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#30B5FF" stop-opacity="0.95"/>
+        <stop offset="50%" stop-color="#E31E24" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#2E3192" stop-opacity="0.75"/>
+      </linearGradient>
       <linearGradient id="hex-grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#F5B942"/>
-        <stop offset="100%" stop-color="#B86A00"/>
+        <stop offset="0%" stop-color="#30B5FF"/>
+        <stop offset="100%" stop-color="#E31E24"/>
       </linearGradient>
     </defs>
   </svg>
@@ -86,8 +96,8 @@
       <ul id="navList">
         <li><a href="index.html">Home</a></li>
         <li><a href="menu.html" class="active-link">Menu</a></li>
-        <li><a href="contact.html">About &amp; Reach Us</a></li>
-        <li><a href="contact.html" class="nav-cta-mobile" style="display:none;">Find a Store</a></li>
+        <li><a href="contact.html">About<span class="nav-wide"> &amp; Reach Us</span></a></li>
+        <li><a href="contact.html#contact" class="nav-cta-mobile">Store</a></li>
       </ul>
     </nav>
     <a href="contact.html#contact" class="nav-cta">Find a Store</a>
@@ -165,7 +175,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&auto=format&fit=crop&q=80" alt="Small Cup" loading="lazy">
+                <img src="assets/official/official_party_cups.jpg" alt="Small Cup" loading="lazy">
               </div>
               <h4 class="cat-item-name">Small Cup</h4>
               <span class="cat-item-size">40ml</span>
@@ -173,7 +183,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&auto=format&fit=crop&q=80" alt="Big Cup" loading="lazy">
+                <img src="assets/official/official_big_cups.jpg" alt="Big Cup" loading="lazy">
               </div>
               <h4 class="cat-item-name">Big Cup</h4>
               <span class="cat-item-size">75ml</span>
@@ -181,7 +191,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1558500582-411ce517fbd8?w=400&auto=format&fit=crop&q=80" alt="Kesar Pista Cone" loading="lazy">
+                <img src="assets/official/official_large_cone.jpg" alt="Kesar Pista Cone" loading="lazy">
               </div>
               <h4 class="cat-item-name">Kesar Pista Cone</h4>
               <span class="cat-item-size">100ml</span>
@@ -189,7 +199,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1580915411954-282cb1b0d780?w=400&auto=format&fit=crop&q=80" alt="Rajbhog Cone" loading="lazy">
+                <img src="assets/official/official_mini_cone.jpg" alt="Rajbhog Cone" loading="lazy">
               </div>
               <h4 class="cat-item-name">Rajbhog Cone</h4>
               <span class="cat-item-size">100ml</span>
@@ -197,7 +207,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&auto=format&fit=crop&q=80" alt="Butterscotch Cup" loading="lazy">
+                <img src="img_butterscotch.png" alt="Butterscotch Cup" loading="lazy">
               </div>
               <h4 class="cat-item-name">Butterscotch Cup</h4>
               <span class="cat-item-size">75ml</span>
@@ -205,7 +215,7 @@
 
             <div class="cat-item" data-category="cones">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&auto=format&fit=crop&q=80" alt="Mango Ripple Cup" loading="lazy">
+                <img src="img_mango_scoop.png" alt="Mango Ripple Cup" loading="lazy">
               </div>
               <h4 class="cat-item-name">Mango Ripple Cup</h4>
               <span class="cat-item-size">75ml</span>
@@ -232,7 +242,7 @@
 
             <div class="cat-item" data-category="bars">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1501430654243-c934cec2e1c0?w=400&auto=format&fit=crop&q=80" alt="Candy Stick" loading="lazy">
+                <img src="img_popsicle.png" alt="Candy Stick" loading="lazy">
                 <span class="item-badge">Summer Hit</span>
               </div>
               <h4 class="cat-item-name">Candy Stick</h4>
@@ -250,7 +260,7 @@
 
             <div class="cat-item" data-category="bars">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400&auto=format&fit=crop&q=80" alt="Almond Crunch Bar" loading="lazy">
+                <img src="assets/official/official_bars.jpg" alt="Almond Crunch Bar" loading="lazy">
               </div>
               <h4 class="cat-item-name">Almond Crunch Bar</h4>
               <span class="cat-item-size">60ml</span>
@@ -258,7 +268,7 @@
 
             <div class="cat-item" data-category="bars">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&auto=format&fit=crop&q=80" alt="Nutty Choco" loading="lazy">
+                <img src="assets/official/official_sandwich.jpg" alt="Nutty Choco" loading="lazy">
               </div>
               <h4 class="cat-item-name">Nutty Choco</h4>
               <span class="cat-item-size">60ml</span>
@@ -266,7 +276,7 @@
 
             <div class="cat-item" data-category="bars">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?w=400&auto=format&fit=crop&q=80" alt="Watermelon Candy" loading="lazy">
+                <img src="img_popsicle.png" alt="Watermelon Candy" loading="lazy">
               </div>
               <h4 class="cat-item-name">Watermelon Candy</h4>
               <span class="cat-item-size">50ml</span>
@@ -274,7 +284,7 @@
 
             <div class="cat-item" data-category="bars">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400&auto=format&fit=crop&q=80" alt="Orange Pop" loading="lazy">
+                <img src="img_popsicle.png" alt="Orange Pop" loading="lazy">
               </div>
               <h4 class="cat-item-name">Orange Pop</h4>
               <span class="cat-item-size">40ml</span>
@@ -310,7 +320,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1590080874088-eec64895e423?w=400&auto=format&fit=crop&q=80" alt="Badam Kulfi" loading="lazy">
+                <img src="assets/official/official_slice_kulfi.jpg" alt="Badam Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Badam Kulfi</h4>
               <span class="cat-item-size">50ml</span>
@@ -318,7 +328,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1572111504285-d72b53b811cb?w=400&auto=format&fit=crop&q=80" alt="Rose Kulfi" loading="lazy">
+                <img src="img_kulfi.png" alt="Rose Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Rose Kulfi</h4>
               <span class="cat-item-size">50ml</span>
@@ -326,7 +336,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1579543949983-eb56d78a87da?w=400&auto=format&fit=crop&q=80" alt="Kaju Badam Kulfi" loading="lazy">
+                <img src="assets/official/official_slice_kulfi.jpg" alt="Kaju Badam Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Kaju Badam Kulfi</h4>
               <span class="cat-item-size">50ml</span>
@@ -334,7 +344,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400&auto=format&fit=crop&q=80" alt="Matka Kulfi" loading="lazy">
+                <img src="img_matka_kulfi.png" alt="Matka Kulfi" loading="lazy">
                 <span class="item-badge">Clay Pot</span>
               </div>
               <h4 class="cat-item-name">Matka Kulfi</h4>
@@ -343,7 +353,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1515024467332-ce2a4af71578?w=400&auto=format&fit=crop&q=80" alt="Saffron Pot Kulfi" loading="lazy">
+                <img src="assets/official/official_pot_kulfi.jpg" alt="Saffron Pot Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Saffron Pot Kulfi</h4>
               <span class="cat-item-size">100ml</span>
@@ -351,7 +361,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1620589125156-f00e9bc04d09?w=400&auto=format&fit=crop&q=80" alt="Basundi Kulfi" loading="lazy">
+                <img src="img_kulfi.png" alt="Basundi Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Basundi Kulfi</h4>
               <span class="cat-item-size">50ml</span>
@@ -359,7 +369,7 @@
 
             <div class="cat-item" data-category="kulfi">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1582332205846-f78a221fdd9a?w=400&auto=format&fit=crop&q=80" alt="Anjeer Kulfi" loading="lazy">
+                <img src="assets/official/official_slice_kulfi.jpg" alt="Anjeer Kulfi" loading="lazy">
               </div>
               <h4 class="cat-item-name">Anjeer Kulfi</h4>
               <span class="cat-item-size">50ml</span>
@@ -395,7 +405,7 @@
 
             <div class="cat-item" data-category="tubs">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1558223631-c4fc82fcce2e?w=400&auto=format&fit=crop&q=80" alt="Single Serve Tub" loading="lazy">
+                <img src="assets/official/official_family_tub.jpg" alt="Single Serve Tub" loading="lazy">
               </div>
               <h4 class="cat-item-name">Single Serve Tub</h4>
               <span class="cat-item-size">100ml</span>
@@ -403,7 +413,7 @@
 
             <div class="cat-item" data-category="tubs">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1583338917451-fade2751d571?w=400&auto=format&fit=crop&q=80" alt="Bulk Pack" loading="lazy">
+                <img src="assets/official/official_bulk_pack.jpg" alt="Bulk Pack" loading="lazy">
                 <span class="item-badge">Party</span>
               </div>
               <h4 class="cat-item-name">Bulk Pack</h4>
@@ -412,7 +422,7 @@
 
             <div class="cat-item" data-category="tubs">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=400&auto=format&fit=crop&q=80" alt="Kesar Badam Tub" loading="lazy">
+                <img src="img_tub.png" alt="Kesar Badam Tub" loading="lazy">
               </div>
               <h4 class="cat-item-name">Kesar Badam Tub</h4>
               <span class="cat-item-size">750ml</span>
@@ -420,7 +430,7 @@
 
             <div class="cat-item" data-category="tubs">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1553177595-4de6bb080e19?w=400&auto=format&fit=crop&q=80" alt="Cookies &amp; Cream Tub" loading="lazy">
+                <img src="assets/official/official_family_tub.jpg" alt="Cookies and Cream Tub" loading="lazy">
               </div>
               <h4 class="cat-item-name">Cookies &amp; Cream Tub</h4>
               <span class="cat-item-size">750ml</span>
@@ -428,7 +438,7 @@
 
             <div class="cat-item" data-category="tubs">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1592651474936-a81d45c71d79?w=400&auto=format&fit=crop&q=80" alt="Gulkand Tub" loading="lazy">
+                <img src="img_tub.png" alt="Gulkand Tub" loading="lazy">
               </div>
               <h4 class="cat-item-name">Gulkand Tub</h4>
               <span class="cat-item-size">100ml</span>
@@ -464,7 +474,7 @@
 
             <div class="cat-item" data-category="cakes">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1562231267-34fec30e0628?w=400&auto=format&fit=crop&q=80" alt="Fun Ball" loading="lazy">
+                <img src="assets/official/official_vanilla_ball.jpg" alt="Fun Ball" loading="lazy">
               </div>
               <h4 class="cat-item-name">Fun Ball</h4>
               <span class="cat-item-size">100ml</span>
@@ -472,7 +482,7 @@
 
             <div class="cat-item" data-category="cakes">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=400&auto=format&fit=crop&q=80" alt="Sundae Cup" loading="lazy">
+                <img src="img_sundae.png" alt="Sundae Cup" loading="lazy">
               </div>
               <h4 class="cat-item-name">Sundae Cup</h4>
               <span class="cat-item-size">150ml</span>
@@ -480,7 +490,7 @@
 
             <div class="cat-item" data-category="cakes">
               <div class="cat-item-img">
-                <img src="https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?w=400&auto=format&fit=crop&q=80" alt="Cassata Slice" loading="lazy">
+                <img src="assets/official/official_cassata.jpg" alt="Cassata Slice" loading="lazy">
               </div>
               <h4 class="cat-item-name">Cassata Slice</h4>
               <span class="cat-item-size">120ml</span>
