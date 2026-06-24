@@ -54,21 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.getElementById('siteHeader');
   const progressBar = document.getElementById('progressBar');
   const toTop = document.getElementById('toTop');
+  let scrollTicking = false;
+
+  const onScroll = () => {
+    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (progressBar && totalScroll > 0) {
+      progressBar.style.width = ((window.scrollY / totalScroll) * 100) + '%';
+    }
+    if (header) {
+      header.classList.toggle('scrolled', window.scrollY > 30);
+    }
+    if (toTop) {
+      toTop.classList.toggle('show', window.scrollY > 600);
+    }
+  };
 
   window.addEventListener('scroll', () => {
-    // Scroll progress bar width calculation
-    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-    if (totalScroll > 0) {
-      const pct = (window.scrollY / totalScroll) * 100;
-      progressBar.style.width = pct + '%';
-    }
-
-    // Header compression toggle
-    header.classList.toggle('scrolled', window.scrollY > 30);
-
-    // Show/hide back to top button
-    toTop.classList.toggle('show', window.scrollY > 600);
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      onScroll();
+      scrollTicking = false;
+    });
   }, { passive: true });
+  onScroll();
 
   // Back to top click event
   toTop.addEventListener('click', () => {
@@ -125,9 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ── 4c. PRODUCT CARD TILT ON HOVER ── */
+  /* ── 4c. PRODUCT CARD TILT ON HOVER (desktop only) ── */
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReducedMotion) {
+  const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  const isMobileView = window.matchMedia('(max-width: 768px)').matches;
+
+  if (!prefersReducedMotion && !isTouchDevice) {
     const tiltSelector = document.body.classList.contains('page-home')
       ? '.cat-item'
       : '.product-card, .cat-item, .why-card';
@@ -175,101 +187,111 @@ document.addEventListener('DOMContentLoaded', () => {
     counterObserver.observe(cnt);
   });
 
-  /* ── 6. HONEY DRIP CURSOR PARTICLES ── */
+  /* ── 6. HONEY DRIP CURSOR PARTICLES (desktop only, pauses when idle) ── */
   const canvas = document.getElementById('drip-canvas');
-  if (canvas) {
+  if (canvas && !isTouchDevice && !prefersReducedMotion) {
     const ctx = canvas.getContext('2d');
     let cw = canvas.width = window.innerWidth;
     let ch = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      cw = canvas.width = window.innerWidth;
-      ch = canvas.height = window.innerHeight;
-    });
-
-    const isTouch = window.matchMedia('(hover:none)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
     let particles = [];
     let lastSpawn = 0;
+    let rafId = null;
     const brandColors = [
       '227, 30, 36',
-      '255, 92, 97',
       '46, 49, 146',
-      '0, 131, 62',
       '48, 181, 255',
       '0, 115, 194'
     ];
 
+    const resizeCanvas = () => {
+      cw = canvas.width = window.innerWidth;
+      ch = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+
     function spawnDrip(x, y) {
-      if (particles.length > 50) return;
+      if (particles.length > 24) return;
       const color = brandColors[Math.floor(Math.random() * brandColors.length)];
-      const radius = 2.5 + Math.random() * 3.5;
       particles.push({
         x, y,
-        vy: 1.0 + Math.random() * 1.5,
-        vx: (Math.random() - 0.5) * 0.5,
-        r: radius,
+        vy: 1.0 + Math.random() * 1.2,
+        vx: (Math.random() - 0.5) * 0.4,
+        r: 2 + Math.random() * 2.5,
         life: 1.0,
         color,
-        elongation: 1.0 + Math.random() * 1.6
+        elongation: 1.0 + Math.random() * 1.2
       });
-    }
-
-    if (!isTouch && !prefersReducedMotion) {
-      window.addEventListener('mousemove', (e) => {
-        const now = performance.now();
-        if (now - lastSpawn > 35) {
-          spawnDrip(e.clientX, e.clientY);
-          lastSpawn = now;
-        }
-      });
+      scheduleFrame();
     }
 
     function animateParticles() {
+      rafId = null;
+      if (!particles.length) return;
+
       ctx.clearRect(0, 0, cw, ch);
       particles.forEach(p => {
         p.y += p.vy;
         p.x += p.vx;
-        p.life -= 0.018;
-        const alpha = Math.max(p.life, 0) * 0.65;
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
+        p.life -= 0.022;
+        const alpha = Math.max(p.life, 0) * 0.55;
         ctx.beginPath();
-        ctx.ellipse(0, 0, p.r * p.life, p.r * p.life * p.elongation, 0, 0, Math.PI * 2);
+        ctx.ellipse(p.x, p.y, p.r * p.life, p.r * p.life * p.elongation, 0, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${alpha})`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = `rgba(${p.color}, ${alpha * 0.4})`;
         ctx.fill();
-        ctx.restore();
       });
 
       particles = particles.filter(p => p.life > 0);
-      requestAnimationFrame(animateParticles);
+      if (particles.length) scheduleFrame();
     }
 
-    if (!prefersReducedMotion) {
-      animateParticles();
+    function scheduleFrame() {
+      if (!rafId) rafId = requestAnimationFrame(animateParticles);
     }
+
+    window.addEventListener('mousemove', (e) => {
+      const now = performance.now();
+      if (now - lastSpawn > 50) {
+        spawnDrip(e.clientX, e.clientY);
+        lastSpawn = now;
+      }
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        particles = [];
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        ctx.clearRect(0, 0, cw, ch);
+      }
+    });
+  } else if (canvas) {
+    canvas.remove();
   }
 
-  /* ── 7. HERO PARALLAX MOUSE EFFECT ── */
+  /* ── 7. HERO PARALLAX (desktop home only) ── */
   const heroSection = document.getElementById('home');
   const heroImgFrame = document.querySelector('.page-home .hero-img-frame');
-  const heroReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (heroSection && heroImgFrame && !heroReducedMotion) {
+  if (heroSection && heroImgFrame && !prefersReducedMotion && !isTouchDevice && !isMobileView) {
+    let parallaxTicking = false;
     heroSection.addEventListener('mousemove', (e) => {
-      const xPercent = (e.clientX / window.innerWidth - 0.5) * 2;
-      const yPercent = (e.clientY / window.innerHeight - 0.5) * 2;
-      heroImgFrame.style.setProperty('--parallax-x', `${xPercent * 10}px`);
-      heroImgFrame.style.setProperty('--parallax-y', `${yPercent * 8}px`);
+      if (parallaxTicking) return;
+      parallaxTicking = true;
+      requestAnimationFrame(() => {
+        const xPercent = (e.clientX / window.innerWidth - 0.5) * 2;
+        const yPercent = (e.clientY / window.innerHeight - 0.5) * 2;
+        heroImgFrame.style.setProperty('--parallax-x', `${xPercent * 8}px`);
+        heroImgFrame.style.setProperty('--parallax-y', `${yPercent * 6}px`);
+        parallaxTicking = false;
+      });
     }, { passive: true });
   }
 
   /* ── 8. HERO ORBITING HEXAGON DOTS ── */
   const orbitRing = document.getElementById('orbitRing');
-  if (orbitRing) {
-    const dotsCount = 8;
+  if (orbitRing && !isMobileView) {
+    const dotsCount = 5;
     const radius = 185;
     const dotColors = ['#30B5FF', '#E31E24', '#2E3192', '#00833E', '#FF5A5F', '#0073C2'];
     for (let i = 0; i < dotsCount; i++) {
@@ -610,29 +632,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ── 14. FLOATING ICE CRYSTALS & ICE CREAM ANIMATIONS ── */
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
-
-    // ── Ice Crystal Layer ──
+  /* ── 14. FLOATING ICE CRYSTALS (home desktop only, lightweight) ── */
+  if (!prefersReducedMotion && !isTouchDevice && !isMobileView && document.body.classList.contains('page-home')) {
     const iceLayer = document.createElement('div');
     iceLayer.className = 'ice-layer';
     document.body.appendChild(iceLayer);
 
-    const crystalShapes = ['', 'hex', 'star'];
-    const crystalColors = ['ic-sky1','ic-sky2','ic-sky3','ic-sky4','ic-sky5','ic-white'];
-    const CRYSTAL_COUNT = 18;
+    const crystalColors = ['ic-sky2', 'ic-sky3', 'ic-sky4', 'ic-white'];
+    const CRYSTAL_COUNT = 6;
 
     for (let i = 0; i < CRYSTAL_COUNT; i++) {
       const el = document.createElement('div');
-      const shape = crystalShapes[Math.floor(Math.random() * crystalShapes.length)];
-      const color = crystalColors[Math.floor(Math.random() * crystalColors.length)];
-      const size  = 8 + Math.random() * 20;           // 8–28px
-      const dur   = 12 + Math.random() * 22;           // 12–34s
-      const delay = -(Math.random() * dur);             // pre-start offset
-      const left  = Math.random() * 100;               // 0–100vw
+      const color = crystalColors[i % crystalColors.length];
+      const size = 8 + Math.random() * 12;
+      const dur = 18 + Math.random() * 14;
+      const delay = -(Math.random() * dur);
+      const left = 10 + Math.random() * 80;
 
-      el.className = `ice-crystal ${shape} ${color}`;
+      el.className = `ice-crystal hex ${color}`;
       el.style.cssText = `
         width: ${size}px;
         height: ${size}px;
@@ -644,50 +661,20 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       iceLayer.appendChild(el);
     }
-
-    // ── Ice Emoji Layer ──
-    const emojiLayer = document.createElement('div');
-    emojiLayer.className = 'ice-emoji-layer';
-    document.body.appendChild(emojiLayer);
-
-    const iceEmojis  = ['🍦','🍧','🍨','🧊','❄️','🍡','🍭','🫐'];
-    const EMOJI_COUNT = 10;
-
-    for (let i = 0; i < EMOJI_COUNT; i++) {
-      const el    = document.createElement('div');
-      const emoji = iceEmojis[Math.floor(Math.random() * iceEmojis.length)];
-      const dur   = 16 + Math.random() * 28;
-      const delay = -(Math.random() * dur);
-      const left  = Math.random() * 96;
-
-      el.className    = 'ice-emoji';
-      el.textContent  = emoji;
-      el.style.cssText = `
-        left: ${left}vw;
-        bottom: -60px;
-        animation-duration: ${dur}s;
-        animation-delay: ${delay}s;
-        opacity: 0;
-      `;
-      emojiLayer.appendChild(el);
-    }
   }
 
-  /* ── HOME PAGE — sparkles, floaters, scroll parallax ── */
-  if (document.body.classList.contains('page-home')) {
+  /* ── HOME PAGE — light sparkles only ── */
+  if (document.body.classList.contains('page-home') && !prefersReducedMotion && !isMobileView) {
     const heroSparkles = document.getElementById('heroSparkles');
-    const heroFloaters = document.getElementById('heroFloaters');
-    const sparkleColors = ['#30B5FF', '#7AD3FF', '#2E3192', '#E31E24', '#00833E', '#FFFFFF', '#FF5A5F'];
-    const floaterColors = ['rgba(48,181,255,0.35)', 'rgba(227,30,36,0.2)', 'rgba(46,49,146,0.2)', 'rgba(0,131,62,0.18)'];
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (heroSparkles && !reducedMotion) {
-      for (let i = 0; i < 40; i++) {
+    if (heroSparkles) {
+      const sparkleColors = ['#30B5FF', '#7AD3FF', '#2E3192'];
+      for (let i = 0; i < 12; i++) {
         const el = document.createElement('span');
         el.className = 'sparkle';
-        const size = 2 + Math.random() * 6;
-        const dur = 1.2 + Math.random() * 3.5;
-        const delay = Math.random() * 5;
+        const size = 2 + Math.random() * 4;
+        const dur = 2 + Math.random() * 3;
+        const delay = Math.random() * 4;
         const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
         el.style.cssText = `
           width: ${size}px;
@@ -702,44 +689,6 @@ document.addEventListener('DOMContentLoaded', () => {
         heroSparkles.appendChild(el);
       }
     }
-
-    if (heroFloaters && !reducedMotion) {
-      for (let i = 0; i < 14; i++) {
-        const el = document.createElement('span');
-        el.className = 'hero-floater';
-        const size = 6 + Math.random() * 18;
-        const dur = 12 + Math.random() * 18;
-        const delay = Math.random() * 12;
-        const color = floaterColors[Math.floor(Math.random() * floaterColors.length)];
-        el.style.cssText = `
-          width: ${size}px;
-          height: ${size}px;
-          left: ${5 + Math.random() * 90}%;
-          bottom: ${-10 - Math.random() * 20}%;
-          background: ${color};
-          box-shadow: 0 0 ${size}px ${color};
-          animation-duration: ${dur}s;
-          animation-delay: ${delay}s;
-        `;
-        heroFloaters.appendChild(el);
-      }
-    }
-
-    const parallaxBg = document.querySelector('.page-home .hero-comb-bg');
-    const auroraLayers = document.querySelectorAll('.page-home .aurora-layer');
-    if (!reducedMotion && parallaxBg) {
-      window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        parallaxBg.style.transform = `translateY(${y * 0.15}px)`;
-        auroraLayers.forEach((layer, i) => {
-          layer.style.transform = `translateY(${y * (0.05 + i * 0.03)}px)`;
-        });
-      }, { passive: true });
-    }
-
-    document.querySelectorAll('.page-home .g-item').forEach((item, i) => {
-      item.style.animationDelay = `${i * 0.1}s`;
-    });
   }
 
 });
