@@ -7,19 +7,32 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 0. ICE CREAM PRELOADER ── */
   const preloader = document.getElementById('preloader');
   if (preloader) {
-    document.body.classList.add('preloader-active');
-    // Allow the cone-rise + scoop animations to play (≈2.2s total), then fade out
-    const preloaderTimeout = setTimeout(() => {
-      preloader.classList.add('loaded');
-      document.body.classList.remove('preloader-active');
-    }, 2400);
+    // Show preloader only once per tab/session
+    const PRELOADER_KEY = 'mithas_preloader_seen_v1';
+    const alreadySeen = sessionStorage.getItem(PRELOADER_KEY) === '1';
 
-    // Also dismiss on click/tap for impatient users
-    preloader.addEventListener('click', () => {
-      clearTimeout(preloaderTimeout);
+    const dismissPreloader = () => {
       preloader.classList.add('loaded');
       document.body.classList.remove('preloader-active');
-    });
+      sessionStorage.setItem(PRELOADER_KEY, '1');
+    };
+
+    if (alreadySeen) {
+      // Skip animations and keep page interactive
+      preloader.classList.add('loaded');
+      document.body.classList.remove('preloader-active');
+    } else {
+      document.body.classList.add('preloader-active');
+
+      // Let the rise + progress play, then slide away
+      const preloaderTimeout = setTimeout(dismissPreloader, 2600);
+
+      // Dismiss on click/tap
+      preloader.addEventListener('click', () => {
+        clearTimeout(preloaderTimeout);
+        dismissPreloader();
+      });
+    }
   }
 
 
@@ -62,46 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  /* ── 3. MOBILE NAVIGATION DRAWER ── */
+  /* ── 3. MOBILE NAVIGATION ── */
   const menuToggle = document.getElementById('menuToggle');
   const navList = document.getElementById('navList');
-  const navCtaMobile = navList.querySelector('.nav-cta-mobile');
 
-  const updateNavForScreenSize = () => {
-    const isMobile = window.innerWidth <= 768;
-    if (navCtaMobile) {
-      navCtaMobile.style.display = isMobile ? 'inline-flex' : 'none';
-    }
-    if (!isMobile) {
-      navList.classList.remove('open');
-      menuToggle.classList.remove('active');
-    }
-  };
-
-  updateNavForScreenSize();
-  window.addEventListener('resize', updateNavForScreenSize);
-
-  menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    navList.classList.toggle('open');
-    menuToggle.classList.toggle('active');
-  });
-
-  // Close nav when links are clicked
-  navList.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      navList.classList.remove('open');
-      menuToggle.classList.remove('active');
+  if (menuToggle && navList) {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navList.classList.toggle('open');
+      menuToggle.classList.toggle('active');
     });
-  });
 
-  // Close nav when clicking outside header
-  document.addEventListener('click', (e) => {
-    if (!header.contains(e.target)) {
-      navList.classList.remove('open');
-      menuToggle.classList.remove('active');
-    }
-  });
+    navList.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navList.classList.remove('open');
+        menuToggle.classList.remove('active');
+      });
+    });
+  }
 
   /* ── 4. SCROLL REVEAL ANIMATIONS ── */
   const revealObserver = new IntersectionObserver((entries) => {
@@ -123,6 +114,35 @@ document.addEventListener('DOMContentLoaded', () => {
       child.style.transitionDelay = (idx * 0.08) + 's';
     });
   });
+
+  /* ── 4b. GALLERY MARQUEE — clone items once for seamless loop ── */
+  document.querySelectorAll('.marquee-row').forEach(row => {
+    const items = [...row.children];
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      row.appendChild(clone);
+    });
+  });
+
+  /* ── 4c. PRODUCT CARD TILT ON HOVER ── */
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion) {
+    const tiltSelector = document.body.classList.contains('page-home')
+      ? '.cat-item'
+      : '.product-card, .cat-item, .why-card';
+    document.querySelectorAll(tiltSelector).forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-6px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
 
   /* ── 5. NUMERICAL COUNTER ANIMATIONS ── */
   const counterObserver = new IntersectionObserver((entries) => {
@@ -172,10 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let particles = [];
     let lastSpawn = 0;
     const brandColors = [
-      '227, 30, 36',   // Brand Red
-      '255, 92, 97',   // Light Red
-      '46, 49, 146',   // Brand Blue
-      '0, 131, 62'     // Brand Green
+      '227, 30, 36',
+      '255, 92, 97',
+      '46, 49, 146',
+      '0, 131, 62',
+      '48, 181, 255',
+      '0, 115, 194'
     ];
 
     function spawnDrip(x, y) {
@@ -233,33 +255,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── 7. HERO PARALLAX MOUSE EFFECT ── */
   const heroSection = document.getElementById('home');
-  const heroVisual = document.querySelector('.hero-visual');
-  if (heroSection && heroVisual) {
+  const heroImgFrame = document.querySelector('.page-home .hero-img-frame');
+  const heroReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (heroSection && heroImgFrame && !heroReducedMotion) {
     heroSection.addEventListener('mousemove', (e) => {
       const xPercent = (e.clientX / window.innerWidth - 0.5) * 2;
       const yPercent = (e.clientY / window.innerHeight - 0.5) * 2;
-      heroVisual.style.transform = `translate(${xPercent * 16}px, ${yPercent * 16}px)`;
+      heroImgFrame.style.setProperty('--parallax-x', `${xPercent * 10}px`);
+      heroImgFrame.style.setProperty('--parallax-y', `${yPercent * 8}px`);
     }, { passive: true });
   }
 
   /* ── 8. HERO ORBITING HEXAGON DOTS ── */
   const orbitRing = document.getElementById('orbitRing');
   if (orbitRing) {
-    const dotsCount = 6;
-    const radius = 180;
+    const dotsCount = 8;
+    const radius = 185;
+    const dotColors = ['#30B5FF', '#E31E24', '#2E3192', '#00833E', '#FF5A5F', '#0073C2'];
     for (let i = 0; i < dotsCount; i++) {
       const angle = (i / dotsCount) * Math.PI * 2;
       const dot = document.createElement('div');
-      const size = 8 + Math.random() * 5;
+      const size = 7 + Math.random() * 6;
+      const color = dotColors[i % dotColors.length];
+      dot.className = 'orbit-dot';
       dot.style.cssText = `
         position: absolute;
         width: ${size}px;
         height: ${size}px;
         left: calc(50% + ${Math.cos(angle) * radius}px - ${size / 2}px);
         top: calc(50% + ${Math.sin(angle) * radius}px - ${size / 2}px);
-        background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+        background: ${color};
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        opacity: ${0.4 + Math.random() * 0.3};
+        opacity: ${0.5 + Math.random() * 0.4};
+        box-shadow: 0 0 10px ${color};
+        animation-delay: ${i * 0.25}s;
       `;
       orbitRing.appendChild(dot);
     }
@@ -642,6 +671,75 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       emojiLayer.appendChild(el);
     }
+  }
+
+  /* ── HOME PAGE — sparkles, floaters, scroll parallax ── */
+  if (document.body.classList.contains('page-home')) {
+    const heroSparkles = document.getElementById('heroSparkles');
+    const heroFloaters = document.getElementById('heroFloaters');
+    const sparkleColors = ['#30B5FF', '#7AD3FF', '#2E3192', '#E31E24', '#00833E', '#FFFFFF', '#FF5A5F'];
+    const floaterColors = ['rgba(48,181,255,0.35)', 'rgba(227,30,36,0.2)', 'rgba(46,49,146,0.2)', 'rgba(0,131,62,0.18)'];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (heroSparkles && !reducedMotion) {
+      for (let i = 0; i < 40; i++) {
+        const el = document.createElement('span');
+        el.className = 'sparkle';
+        const size = 2 + Math.random() * 6;
+        const dur = 1.2 + Math.random() * 3.5;
+        const delay = Math.random() * 5;
+        const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+        el.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          background: ${color};
+          color: ${color};
+          animation-duration: ${dur}s;
+          animation-delay: ${delay}s;
+        `;
+        heroSparkles.appendChild(el);
+      }
+    }
+
+    if (heroFloaters && !reducedMotion) {
+      for (let i = 0; i < 14; i++) {
+        const el = document.createElement('span');
+        el.className = 'hero-floater';
+        const size = 6 + Math.random() * 18;
+        const dur = 12 + Math.random() * 18;
+        const delay = Math.random() * 12;
+        const color = floaterColors[Math.floor(Math.random() * floaterColors.length)];
+        el.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${5 + Math.random() * 90}%;
+          bottom: ${-10 - Math.random() * 20}%;
+          background: ${color};
+          box-shadow: 0 0 ${size}px ${color};
+          animation-duration: ${dur}s;
+          animation-delay: ${delay}s;
+        `;
+        heroFloaters.appendChild(el);
+      }
+    }
+
+    const parallaxBg = document.querySelector('.page-home .hero-comb-bg');
+    const auroraLayers = document.querySelectorAll('.page-home .aurora-layer');
+    if (!reducedMotion && parallaxBg) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        parallaxBg.style.transform = `translateY(${y * 0.15}px)`;
+        auroraLayers.forEach((layer, i) => {
+          layer.style.transform = `translateY(${y * (0.05 + i * 0.03)}px)`;
+        });
+      }, { passive: true });
+    }
+
+    document.querySelectorAll('.page-home .g-item').forEach((item, i) => {
+      item.style.animationDelay = `${i * 0.1}s`;
+    });
   }
 
 });
